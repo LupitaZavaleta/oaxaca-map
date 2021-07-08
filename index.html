@@ -34,6 +34,36 @@
       bottom: 0;
     }
 
+    /* Set time slider styles */
+    #slider {
+      position: absolute;
+      height: 25px;
+      bottom: 10px;
+      left: 172px;
+      z-index: 1000;
+      background-color: #FFFFFF;
+      border-radius: 3px;
+      box-shadow: 0px 0px 0px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Set temporal legend styles */
+    #temporal {
+      height: 25px;
+      width: 142px;
+      background-color: #FFFFFF;
+      border-radius: 3px;
+      box-shadow: 0px 0px 0px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Set the styles for the text span in the temporal legend */
+    #temporal span {
+      font-family: 'Montserrat', sans-serif;
+      position: absolute;
+      font-size: 13px;
+      bottom: 2px;
+      left: 10px;
+    }
+
     /* Add banner to header background */
     header {
       /*background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Coffee_Beans_%282732722806%29.jpg/1024px-Coffee_Beans_%282732722806%29.jpg');*/
@@ -94,6 +124,15 @@
   </header>
   <!-- The map -->
   <div id="map"></div>
+  <!-- ui slider -->
+  <div id="slider" class="leaflet-control">
+    <!-- Use the first and last year of the time data as the min and max. Set the initial value as the first year. Set the steps at one year. -->
+    <input type="range" min="1" max="5" value="1" step="1" class="slider" />
+  </div>
+  <!-- temporal legend -->
+  <div id='temporal'>
+    <h5 class='txt-bold'><span id='span'></span></h5>
+  </div>
   <!-- Add a link to the Leaflet JavaScript library so you can reference it for building your map -->
   <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
   <!-- Load Esri Leaflet from CDN -->
@@ -152,7 +191,7 @@
     }).addTo(map);
 
     // Add a scale bar to the map
-    L.control.scale().addTo(map);
+    L.control.scale({position:'bottomright'}).addTo(map);
 
     const bugIcon = L.ExtraMarkers.icon({
       icon: 'fa-bug',
@@ -193,6 +232,7 @@
         d === 'Finca cafetalera La Providencia' ? coffeeIcon :
         bugIcon;
     };
+
     function getHighlight(d) {
       return d === 'Miahuatlán de Porfirio Díaz' ? bugHighlight :
         d === 'San José del Pacífico' ? bugHighlight :
@@ -215,6 +255,10 @@
       // when the files are done loading,
       // identify them with names and process them through a function
     ).done(function(oaxacaPts, oaxacaPts2, newLines1, oldLines1, newLines2, oldLines2) {
+
+      // define the value in the slider when the map loads
+      let pointOrder = $('.slider').val();
+
       // initiate a leaflet GeoJSON layer with L.geoJson, feed it the data, and add to the map
       const oaxacaLayer = L.geoJson(oaxacaPts, {
         pointToLayer: function(feature, latlng) {
@@ -381,7 +425,63 @@
           map.removeLayer(arrows4);
         }
       });
+
+      // call functions defined below
+      sequenceUI(); // calls the time slider and sends the layer to it
+      createTemporalLegend(pointOrder); // calls the createTemporalLegend function
     });
+
+    // call the UI slider with a function called "sequenceUI"
+    function sequenceUI() { // feed it the data
+
+      // use the jQuery ajax method to get the slider element
+      $('.slider')
+        .on('input change', function() { // when the input changes...
+          let pointOrder = $(this).val(); // identify the year selected with "pointOrder"
+          createTemporalLegend(pointOrder); // call the createTemporalLegend function
+        });
+
+    }; // End sequenceUI function
+
+    // Add a temporal legend in sync with the UI slider
+    function createTemporalLegend(pointOrder) { // feed it the selected order
+
+      // define the temporal legend with a Leaflet control
+      const temporalLegend = L.control({
+        position: 'bottomleft' // place the temporal legend at bottom left corner
+      });
+
+      // when added to the map
+      temporalLegend.onAdd = function(map) {
+
+        const div = L.DomUtil.get("temporal"); // get the div
+
+        // disable the mouse events
+        L.DomEvent.addListener(div, 'mousedown', function(e) {
+          L.DomEvent.stopPropagation(e);
+        });
+
+        return div; // return the div from the function
+
+      };
+
+      if (pointOrder == 1) {
+        var date = "1874\/02\/02 12:00:00";
+      } if (pointOrder == 2) {
+        var date = "1874\/02\/03 07:00:00";
+      } if (pointOrder == 3) {
+        var date = "1874\/02\/03 03:00:00";
+      } if (pointOrder == 4) {
+        var date = "1874\/02\/04 09:00:00";
+      } if (pointOrder == 5) {
+        var date = "1874\/02\/09 12:00:00";
+      };
+
+      $('#temporal span').html(date); //change grade value to that currently selected by UI slider
+
+      temporalLegend.addTo(map); // add the temporal legend to the map
+
+    }; // End createTemporalLegend function
   </script>
 </body>
 
