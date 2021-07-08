@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <!-- Give the page a title -->
+  <title>Lupita's Map</title>
+  <!-- Add a link to the Leaflet CSS library so you can reference it for styling your map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+  <!--for icon support-->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/v4-shims.css">
+  <!-- for icon markers -->
+  <link rel="stylesheet" href="css/leaflet.extra-markers.min.css">
+  <!-- Embed Mulish and Merriweather fonts from Google -->
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300&family=Mulish&display=swap" rel="stylesheet">
+  <!-- All the CSS code goes inside the style tags below -->
+  <style>
+    /* style the body */
+    body {
+      margin: 0px;
+      height: 100%;
+      width: 100%;
+    }
+
+    /* style the map */
+    #map {
+      position: absolute;
+      width: 100%;
+      top: 0px;
+      bottom: 0;
+    }
+
+    /* Add banner to header background */
+    header {
+      /*background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Coffee_Beans_%282732722806%29.jpg/1024px-Coffee_Beans_%282732722806%29.jpg');*/
+      position: fixed;
+      width: 20%;
+      height: 60px;
+      background-color: rgba(255, 255, 255, 1.0);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+      border-radius: 3px;
+      z-index: 800;
+    }
+
+    /* Set and style fonts for text in map */
+    h1 {
+      font-family: 'Mulish', sans-serif;
+      font-size: 22px;
+      display: inline-block;
+      color: black;
+      margin-top: 0.10em;
+      margin-bottom: 0.0em;
+      margin-left: 0.5em;
+      margin-right: 0;
+      font-weight: normal;
+    }
+
+    h2 {
+      font-family: 'Merriweather', serif;
+      font-size: 11px;
+      display: inline-block;
+      color: black;
+      margin-top: 0.0em;
+      margin-bottom: 0.0em;
+      margin-left: 1.0em;
+      margin-right: 0;
+      font-weight: normal;
+    }
+
+    a {
+      color: #f7f4ea;
+    }
+
+    /* the zoom control */
+    .leaflet-top {
+      bottom: 0;
+    }
+
+    .leaflet-top .leaflet-control-zoom {
+      top: 60px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header content -->
+  <header>
+    <h1>Lupita's Map</h1><br>
+    <h2>By Lupita Zavaleta Vega</h2>
+  </header>
+  <!-- The map -->
+  <div id="map"></div>
+  <!-- Add a link to the Leaflet JavaScript library so you can reference it for building your map -->
+  <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+  <!-- Load Esri Leaflet from CDN -->
+  <script src="https://unpkg.com/esri-leaflet/dist/esri-leaflet.js"></script>
+  <!-- for icon markers -->
+  <script src="js/leaflet.extra-markers.min.js"></script>
+  <!-- Add a link to the jQuery JavaScript library so you can leverage ajax methods to load your data -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <!-- for migration arrows -->
+  <script src="js/leaflet-geometryutil.js"></script>
+  <script src="js/leaflet-arrowheads.js"></script>
+  <!-- All JavaScript goes inside the script tags below -->
+  <script>
+    // define map options
+    const mapOptions = {
+      center: [16.1, -96.416667 /*lat, long*/ ], // center the map on the central coordinates for Oaxaca
+      zoom: 10, // set initial zoom
+      minZoom: 5, // set equal to tile zoom intervals
+      maxZoom: 11, // set equal to tile zoom intervals
+    };
+
+    // define the map with the options above
+    const map = L.map("map", mapOptions);
+
+    // add a base map to the map
+    const contemporary = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      minZoom: 5,
+      maxZoom: 11,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    }).addTo(map);
+
+    // Overlay layers (TMS)
+    const oaxacaMap = L.tileLayer('tiles/{z}/{x}/{y}.png', {
+      tms: true,
+      opacity: 1.0,
+      attribution: "",
+      minZoom: 5,
+      maxZoom: 11
+    });
+
+    const vintage = L.esri.tiledMapLayer({
+      url: "https://tiles.arcgis.com/tiles/kd9gaiUExYqUbnoq/arcgis/rest/services/oaxaca_tiles_new/MapServer",
+      minZoom: 5,
+      maxZoom: 11
+    });
+
+    const basemaps = {
+      "OpenStreetMap": contemporary,
+      "Contemporary Vintage": vintage,
+      "1883 Map": oaxacaMap
+    };
+
+    // Add base layers
+    L.control.layers(basemaps, null, {
+      collapsed: false
+    }).addTo(map);
+
+    // Add a scale bar to the map
+    L.control.scale().addTo(map);
+
+    const bugIcon = L.ExtraMarkers.icon({
+      icon: 'fa-bug',
+      markerColor: 'purple',
+      shape: 'star',
+      prefix: 'fas'
+    });
+
+    const bugHighlight = L.ExtraMarkers.icon({
+      icon: 'fa-bug',
+      markerColor: 'yellow',
+      shape: 'star',
+      prefix: 'fas'
+    });
+
+    const coffeeIcon = L.ExtraMarkers.icon({
+      icon: 'fa-coffee',
+      markerColor: 'purple',
+      shape: 'star',
+      prefix: 'fa'
+    });
+
+    const coffeeHighlight = L.ExtraMarkers.icon({
+      icon: 'fa-coffee',
+      markerColor: 'yellow',
+      shape: 'star',
+      prefix: 'fa'
+    });
+
+    // Add functions to switch the icons by filter type
+    function getIcon(d) {
+      return d === 'Miahuatlán de Porfirio Díaz' ? bugIcon :
+        d === 'San José del Pacífico' ? bugIcon :
+        d === 'San Miguel Suchixtepec' ? bugIcon :
+        d === 'San Pedro el Alto' ? bugIcon :
+        d === 'Río Copalita' ? bugIcon :
+        d === 'Cerro de la Pluma' ? coffeeIcon :
+        d === 'Finca cafetalera La Providencia' ? coffeeIcon :
+        bugIcon;
+    };
+    function getHighlight(d) {
+      return d === 'Miahuatlán de Porfirio Díaz' ? bugHighlight :
+        d === 'San José del Pacífico' ? bugHighlight :
+        d === 'San Miguel Suchixtepec' ? bugHighlight :
+        d === 'San Pedro el Alto' ? bugHighlight :
+        d === 'Río Copalita' ? bugHighlight :
+        d === 'Cerro de la Pluma' ? coffeeHighlight :
+        d === 'Finca cafetalera La Providencia' ? coffeeHighlight :
+        bugHighlight;
+    };
+
+    // use jquery to load GeoJSON data
+    $.when(
+      $.getJSON('data/Oaxaca-Coords-Actual.geojson'),
+      $.getJSON('data/Oaxaca-Coords-Old.geojson'),
+      $.getJSON('data/Movement-Splines-Contemporary-1.geojson'),
+      $.getJSON('data/Movement-Splines-Old-1.geojson'),
+      $.getJSON('data/Movement-Splines-Contemporary-2.geojson'),
+      $.getJSON('data/Movement-Splines-Old-2.geojson'), // replace
+      // when the files are done loading,
+      // identify them with names and process them through a function
+    ).done(function(oaxacaPts, oaxacaPts2, newLines1, oldLines1, newLines2, oldLines2) {
+      // initiate a leaflet GeoJSON layer with L.geoJson, feed it the data, and add to the map
+      const oaxacaLayer = L.geoJson(oaxacaPts, {
+        pointToLayer: function(feature, latlng) {
+          let place = feature.properties.Place;
+          return L.marker(latlng, {
+            icon: getIcon(place)
+          });
+        },
+        // for each feature...
+        onEachFeature: function(feature, layer) {
+
+          let popUp = (layer.feature.properties.Place); // the column is "Place"
+
+          layer.bindPopup(popUp);
+
+          layer.once('mouseover', function() {
+            layer.openPopup();
+            layer.setIcon(getHighlight(popUp));
+          });
+          layer.on('mouseout', function(e) { // On mouseout...
+            layer.closePopup(); // close the popup
+            layer.setIcon(getIcon(popUp));
+            layer.once('mouseover', function() {
+              layer.openPopup();
+              layer.setIcon(getHighlight(popUp));
+            });
+          });
+        }
+      }).addTo(map);
+
+      // initiate a leaflet GeoJSON layer with L.geoJson, feed it the data, and add to the map
+      const oaxacaLayer2 = L.geoJson(oaxacaPts2, {
+        pointToLayer: function(feature, latlng) {
+          let place = feature.properties.Place;
+          return L.marker(latlng, {
+            icon: getIcon(place)
+          });
+        },
+        // for each feature...
+        onEachFeature: function(feature, layer) {
+
+          let popUp = (layer.feature.properties.Place); // replace
+
+          layer.bindPopup(popUp);
+          layer.once('mouseover', function() {
+            layer.openPopup();
+            layer.setIcon(getHighlight(popUp));
+          });
+          layer.on('mouseout', function(e) { // On mouseout...
+            layer.closePopup(); // close the popup
+            layer.setIcon(getIcon(popUp));
+            layer.once('mouseover', function() {
+              layer.openPopup();
+              layer.setIcon(getHighlight(popUp));
+            });
+          });
+        }
+      });
+
+      const arrows1 = L.geoJson(newLines1, {
+        // Style the arrowheads
+        arrowheads: {
+          yawn: 30,
+          size: '10px',
+          frequency: 'endonly',
+          opacity: 0.65
+        },
+        // Style the layer
+        style: function(feature) {
+          return {
+            color: '#4f0809',
+            dashArray: '10, 5',
+            weight: 2.5,
+            opacity: 0.65
+          };
+        },
+        onEachFeature: function(feature, layer) {
+          var props = layer.feature.properties;
+        }
+      }).addTo(map);
+
+      const arrows2 = L.geoJson(oldLines1, {
+        // Style the arrowheads
+        arrowheads: {
+          yawn: 30,
+          size: '10px',
+          frequency: 'endonly',
+          opacity: 0.65
+        },
+        // Style the layer
+        style: function(feature) {
+          return {
+            color: '#4f0809',
+            dashArray: '10, 5',
+            weight: 2.5,
+            opacity: 0.65
+          };
+        },
+        onEachFeature: function(feature, layer) {
+          var props = layer.feature.properties;
+        }
+      });
+
+      const arrows3 = L.geoJson(newLines2, {
+        // Style the arrowheads
+        arrowheads: {
+          yawn: 30,
+          size: '10px',
+          frequency: 'endonly',
+          opacity: 0.65
+        },
+        // Style the layer
+        style: function(feature) {
+          return {
+            color: '#9400d3',
+            dashArray: '10, 5',
+            weight: 2.5,
+            opacity: 0.65
+          };
+        },
+        onEachFeature: function(feature, layer) {
+          var props = layer.feature.properties;
+        }
+      }).addTo(map);
+
+      const arrows4 = L.geoJson(oldLines2, {
+        // Style the arrowheads
+        arrowheads: {
+          yawn: 30,
+          size: '10px',
+          frequency: 'endonly',
+          opacity: 0.65
+        },
+        // Style the layer
+        style: function(feature) {
+          return {
+            color: '#9400d3',
+            dashArray: '10, 5',
+            weight: 2.5,
+            opacity: 0.65
+          };
+        },
+        onEachFeature: function(feature, layer) {
+          var props = layer.feature.properties;
+        }
+      });
+
+      // on base map change, swap one set of points for the other
+      map.on('baselayerchange', function(e) {
+        if (e.name == "1883 Map") {
+          oaxacaLayer2.addTo(map);
+          arrows2.addTo(map);
+          arrows4.addTo(map);
+          map.removeLayer(oaxacaLayer);
+          map.removeLayer(arrows1);
+          map.removeLayer(arrows3);
+        }
+        if (e.name == "OpenStreetMap" || e.name == "Contemporary Vintage") {
+          oaxacaLayer.addTo(map);
+          arrows1.addTo(map);
+          arrows3.addTo(map);
+          map.removeLayer(oaxacaLayer2);
+          map.removeLayer(arrows2);
+          map.removeLayer(arrows4);
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,14 @@
+{
+"type": "FeatureCollection",
+"name": "Oaxaca-Coords-Old",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "Place": "Miahuatlán de Porfirio Díaz", "Latitude": 16.46213, "Longitude": -96.48763 }, "geometry": { "type": "Point", "coordinates": [ -96.48763, 16.46213 ] } },
+{ "type": "Feature", "properties": { "Place": "San José del Pacífico", "Latitude": 16.29172, "Longitude": -96.44991 }, "geometry": { "type": "Point", "coordinates": [ -96.44991, 16.29172 ] } },
+{ "type": "Feature", "properties": { "Place": "San Miguel Suchixtepec", "Latitude": 16.25813, "Longitude": -96.41835 }, "geometry": { "type": "Point", "coordinates": [ -96.41835, 16.25813 ] } },
+{ "type": "Feature", "properties": { "Place": "San Pedro el Alto", "Latitude": 16.19858, "Longitude": -96.41683 }, "geometry": { "type": "Point", "coordinates": [ -96.41683, 16.19858 ] } },
+{ "type": "Feature", "properties": { "Place": "Río Copalita", "Latitude": 16.1189, "Longitude": -96.39261 }, "geometry": { "type": "Point", "coordinates": [ -96.39261, 16.1189 ] } },
+{ "type": "Feature", "properties": { "Place": "Cerro de la Pluma", "Latitude": 16.02188, "Longitude": -96.28552 }, "geometry": { "type": "Point", "coordinates": [ -96.28552, 16.02188 ] } },
+{ "type": "Feature", "properties": { "Place": "Finca cafetalera La Providencia", "Latitude": 16.01498, "Longitude": -96.27634 }, "geometry": { "type": "Point", "coordinates": [ -96.27634, 16.01498 ] } }
+]
+}
