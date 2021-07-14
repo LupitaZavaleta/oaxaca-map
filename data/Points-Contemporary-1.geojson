@@ -7,8 +7,6 @@
 { "type": "Feature", "properties": { "Place": "San José del Pacífico", "Latitude": 16.169548, "Longitude": -96.50297716, "Order": 2 }, "geometry": { "type": "Point", "coordinates": [ -96.50298, 16.16955 ] } },
 { "type": "Feature", "properties": { "Place": "San Miguel Suchixtepec", "Latitude": 16.0932988, "Longitude": -96.46984398, "Order": 3 }, "geometry": { "type": "Point", "coordinates": [ -96.46984, 16.0933 ] } },
 { "type": "Feature", "properties": { "Place": "San Pedro el Alto", "Latitude": 16.03654215, "Longitude": -96.47242723, "Order": 4 }, "geometry": { "type": "Point", "coordinates": [ -96.47243, 16.03654 ] } },
-{ "type": "Feature", "properties": { "Place": "Río Copalita", "Latitude": 15.96764022, "Longitude": -96.45913496, "Order": 5 }, "geometry": { "type": "Point", "coordinates": [ -96.45913, 15.96764 ] } },
-{ "type": "Feature", "properties": { "Place": "Cerro de la Pluma", "Latitude": 15.93031151, "Longitude": -96.4193336, "Order": 6 }, "geometry": { "type": "Point", "coordinates": [ -96.41933, 15.93031 ] } },
-{ "type": "Feature", "properties": { "Place": "Finca cafetalera La Providencia", "Latitude": 15.92340766, "Longitude": -96.41014954000001, "Order": 7 }, "geometry": { "type": "Point", "coordinates": [ -96.41015, 15.92341 ] } }
+{ "type": "Feature", "properties": { "Place": "Río Copalita", "Latitude": 15.96764022, "Longitude": -96.45913496, "Order": 5 }, "geometry": { "type": "Point", "coordinates": [ -96.45913, 15.96764 ] } }
 ]
 }
