@@ -5,18 +5,21 @@
 <head>
   <meta charset="utf-8" />
   <!-- Give the page a title -->
-  <title>Lupita's Map</title>
+  <title>Camino a Pluma</title>
   <!-- Add a link to the Leaflet CSS library so you can reference it for styling your map -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+  <!-- For grouped layer control -->
+  <link rel="stylesheet" href="css/leaflet.groupedlayercontrol.css" />
   <!--for icon support-->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/v4-shims.css">
   <!-- for icon markers -->
   <link rel="stylesheet" href="css/leaflet.extra-markers.min.css">
-  <!-- Embed Mulish and Merriweather fonts from Google -->
-  <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300&family=Mulish&display=swap" rel="stylesheet">
+  <!-- Embed Playfair font from Google -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
   <!-- All the CSS code goes inside the style tags below -->
   <style>
     /* style the body */
@@ -35,11 +38,11 @@
     }
 
     /* Set time slider styles */
-    #slider {
+    #slider, #slider2 {
       position: absolute;
       height: 25px;
       bottom: 10px;
-      left: 172px;
+      left: 189px;
       z-index: 1000;
       background-color: #FFFFFF;
       border-radius: 3px;
@@ -47,38 +50,40 @@
     }
 
     /* Set temporal legend styles */
-    #temporal {
+    #temporal, #temporal2 {
       height: 25px;
-      width: 142px;
+      width: 166px;
       background-color: #FFFFFF;
       border-radius: 3px;
       box-shadow: 0px 0px 0px 2px rgba(0, 0, 0, 0.3);
     }
 
     /* Set the styles for the text span in the temporal legend */
-    #temporal span {
-      font-family: 'Montserrat', sans-serif;
+    #temporal span, #temporal2 span {
+      font-family: 'Playfair Display', serif;
       position: absolute;
-      font-size: 13px;
-      bottom: 2px;
-      left: 10px;
+      font-size: 14px;
+      bottom: 4px;
+      left: 9px;
     }
 
     /* Add banner to header background */
     header {
       /*background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Coffee_Beans_%282732722806%29.jpg/1024px-Coffee_Beans_%282732722806%29.jpg');*/
       position: fixed;
-      width: 20%;
+      width: 184px;
       height: 60px;
+      top: 10px;
+      left: 12px;
       background-color: rgba(255, 255, 255, 1.0);
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+      box-shadow: 0px 0px 0px 2px rgba(0, 0, 0, 0.3);
       border-radius: 3px;
       z-index: 800;
     }
 
     /* Set and style fonts for text in map */
     h1 {
-      font-family: 'Mulish', sans-serif;
+      font-family: 'Playfair Display', serif;
       font-size: 22px;
       display: inline-block;
       color: black;
@@ -90,13 +95,25 @@
     }
 
     h2 {
-      font-family: 'Merriweather', serif;
+      font-family: 'Playfair Display', serif;
       font-size: 11px;
       display: inline-block;
       color: black;
       margin-top: 0.0em;
       margin-bottom: 0.0em;
       margin-left: 1.0em;
+      margin-right: 0;
+      font-weight: normal;
+    }
+
+    h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 12px;
+      display: inline-block;
+      color: black;
+      margin-top: 0.0em;
+      margin-bottom: 0.0em;
+      margin-left: 0.0em;
       margin-right: 0;
       font-weight: normal;
     }
@@ -111,7 +128,11 @@
     }
 
     .leaflet-top .leaflet-control-zoom {
-      top: 60px;
+      top: 70px;
+    }
+
+    .leaflet-control-layers-expanded .leaflet-control-layers-list {
+      font-family: 'Playfair Display', serif;
     }
   </style>
 </head>
@@ -119,24 +140,35 @@
 <body>
   <!-- Header content -->
   <header>
-    <h1>Lupita's Map</h1><br>
+    <h1>Camino a Pluma</h1><br>
     <h2>By Lupita Zavaleta Vega</h2>
   </header>
   <!-- The map -->
   <div id="map"></div>
-  <!-- ui slider -->
+  <!-- first ui slider -->
   <div id="slider" class="leaflet-control">
-    <!-- Use the first and last year of the time data as the min and max. Set the initial value as the first year. Set the steps at one year. -->
-    <input type="range" min="1" max="5" value="1" step="1" class="slider" />
+    <!-- Use the first and last step of the data as the min and max. Set the initial value as the first step. Set the steps at one. -->
+    <input type="range" min="1" max="6" value="1" step="1" class="slider" />
+  </div>
+  <!-- second ui slider -->
+  <div id="slider2" class="leaflet-control">
+    <!-- Use the first and last step of the data as the min and max. Set the initial value as the first step. Set the steps at one. -->
+    <input type="range" min="1" max="7" value="1" step="1" class="slider2" />
   </div>
   <!-- temporal legend -->
   <div id='temporal'>
-    <h5 class='txt-bold'><span id='span'></span></h5>
+    <h3><span id='span'></span></h3>
   </div>
+  <div id='temporal2'>
+    <h3><span id='span'></span></h3>
+  </div>
+
   <!-- Add a link to the Leaflet JavaScript library so you can reference it for building your map -->
   <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
   <!-- Load Esri Leaflet from CDN -->
   <script src="https://unpkg.com/esri-leaflet/dist/esri-leaflet.js"></script>
+  <!-- For grouped layer control -->
+  <script src="js/leaflet.groupedlayercontrol.js"></script>
   <!-- for icon markers -->
   <script src="js/leaflet.extra-markers.min.js"></script>
   <!-- Add a link to the jQuery JavaScript library so you can leverage ajax methods to load your data -->
@@ -144,8 +176,10 @@
   <!-- for migration arrows -->
   <script src="js/leaflet-geometryutil.js"></script>
   <script src="js/leaflet-arrowheads.js"></script>
+
   <!-- All JavaScript goes inside the script tags below -->
   <script>
+
     // define map options
     const mapOptions = {
       center: [16.1, -96.416667 /*lat, long*/ ], // center the map on the central coordinates for Oaxaca
@@ -157,14 +191,7 @@
     // define the map with the options above
     const map = L.map("map", mapOptions);
 
-    // add a base map to the map
-    const contemporary = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      minZoom: 5,
-      maxZoom: 11,
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    }).addTo(map);
-
-    // Overlay layers (TMS)
+    // 1883 map tiles
     const oaxacaMap = L.tileLayer('tiles/{z}/{x}/{y}.png', {
       tms: true,
       opacity: 1.0,
@@ -173,26 +200,14 @@
       maxZoom: 11
     });
 
+    // vintage-looking contemporary map tiles
     const vintage = L.esri.tiledMapLayer({
       url: "https://tiles.arcgis.com/tiles/kd9gaiUExYqUbnoq/arcgis/rest/services/oaxaca_tiles_new/MapServer",
       minZoom: 5,
       maxZoom: 11
-    });
-
-    const basemaps = {
-      "OpenStreetMap": contemporary,
-      "Contemporary Vintage": vintage,
-      "1883 Map": oaxacaMap
-    };
-
-    // Add base layers
-    L.control.layers(basemaps, null, {
-      collapsed: false
     }).addTo(map);
 
-    // Add a scale bar to the map
-    L.control.scale({position:'bottomright'}).addTo(map);
-
+    // the bug icon
     const bugIcon = L.ExtraMarkers.icon({
       icon: 'fa-bug',
       markerColor: 'purple',
@@ -200,6 +215,7 @@
       prefix: 'fas'
     });
 
+    // the highlighted bug icon
     const bugHighlight = L.ExtraMarkers.icon({
       icon: 'fa-bug',
       markerColor: 'yellow',
@@ -207,6 +223,7 @@
       prefix: 'fas'
     });
 
+    // the coffee icon
     const coffeeIcon = L.ExtraMarkers.icon({
       icon: 'fa-coffee',
       markerColor: 'purple',
@@ -214,6 +231,7 @@
       prefix: 'fa'
     });
 
+    // the highlighted coffee icon
     const coffeeHighlight = L.ExtraMarkers.icon({
       icon: 'fa-coffee',
       markerColor: 'yellow',
@@ -244,23 +262,170 @@
         bugHighlight;
     };
 
+    // Empty layer groups for overlays
+    const pointsNew1 = L.layerGroup(); // contemporary map points on the first voyage
+    const pointsNew2 = L.layerGroup(); // contemporary map points on the second voyage
+    const pointsOld1 = L.layerGroup(); // old map points on the first voyage
+    const pointsOld2 = L.layerGroup(); // old map points on the second voyage
+    const trip1New = L.layerGroup(); // the first voyage on the contemporary map
+    const trip1Old = L.layerGroup(); // the first voyage on the old map
+    const trip2New = L.layerGroup(); // the second voyage on the contemporary map
+    const trip2Old = L.layerGroup(); // the second voyage on the old map
+
+    const basemaps = {
+      "Contemporary Vintage": vintage,
+      "1883 Map": oaxacaMap
+    };
+
+    // Grouped overlays
+    const overlays1 = {
+      "Voyages": {
+        "First Voyage": trip1New,
+        "Second Voyage": trip2New
+      }
+    };
+
+    const overlays2 = {
+      "Journeys": {
+        "First Journey": trip1Old,
+        "Second Journey": trip2Old
+      }
+    };
+
+    // Grouped layer controls
+    const originalControl = L.control.groupedLayers(basemaps, overlays1, {
+      // Make the "Journeys" group exclusive (use radio inputs)
+      exclusiveGroups: ["Voyages"],
+      // Do not collapse the control
+      collapsed: false
+    }).addTo(map);
+
+    const altControl = L.control.groupedLayers(basemaps, overlays2, {
+      // Make the "Journeys" group exclusive (use radio inputs)
+      exclusiveGroups: ["Journeys"],
+      // Do not collapse the control
+      collapsed: false
+    });
+
+    // Add a scale bar to the map
+    L.control.scale({position:'bottomright'}).addTo(map);
+
+    // the original slider state
+    $('#slider').show();
+    $('#temporal').show();
+    $('#slider2').hide();
+    $('#temporal2').hide();
+
+    map.on('baselayerchange', function(e) {
+      if (e.name == "Contemporary Vintage") {
+        vintage.addTo(map);
+        map.removeLayer(oaxacaMap);
+        originalControl.addTo(map);
+        map.removeControl(altControl);
+        map.removeLayer(trip1New);
+        map.removeLayer(pointsNew1);
+        map.removeLayer(trip1Old);
+        map.removeLayer(pointsOld1);
+        map.removeLayer(trip2New);
+        map.removeLayer(pointsNew2);
+        map.removeLayer(trip2Old);
+        map.removeLayer(pointsOld2);
+      };
+      if (e.name == "1883 Map") {
+        oaxacaMap.addTo(map);
+        map.removeLayer(vintage);
+        altControl.addTo(map);
+        map.removeControl(originalControl);
+        map.removeLayer(trip1New);
+        map.removeLayer(pointsNew1);
+        map.removeLayer(trip1Old);
+        map.removeLayer(pointsOld1);
+        map.removeLayer(trip2New);
+        map.removeLayer(pointsNew2);
+        map.removeLayer(trip2Old);
+        map.removeLayer(pointsOld2);
+      };
+    })
+
+    map.on('overlayadd', function(e) {
+      if (e.name == "First Voyage") {
+        $('#slider').show();
+        $('#temporal').show();
+        $('#slider2').hide();
+        $('#temporal2').hide();
+        trip1New.addTo(map);
+        pointsNew1.addTo(map);
+        map.removeLayer(trip1Old);
+        map.removeLayer(pointsOld1);
+        map.removeLayer(trip2New);
+        map.removeLayer(pointsNew2);
+        map.removeLayer(trip2Old);
+        map.removeLayer(pointsOld2);
+      };
+      if (e.name == "First Journey") {
+        $('#slider').show();
+        $('#temporal').show();
+        $('#slider2').hide();
+        $('#temporal2').hide();
+        trip1Old.addTo(map);
+        pointsOld1.addTo(map);
+        map.removeLayer(trip1New);
+        map.removeLayer(pointsNew1);
+        map.removeLayer(trip2New);
+        map.removeLayer(pointsNew2);
+        map.removeLayer(trip2Old);
+        map.removeLayer(pointsOld2);
+      };
+      if (e.name == "Second Voyage") {
+        $('#slider').hide();
+        $('#temporal').hide();
+        $('#slider2').show();
+        $('#temporal2').show();
+        trip2New.addTo(map);
+        pointsNew2.addTo(map);
+        map.removeLayer(trip1New);
+        map.removeLayer(pointsNew1);
+        map.removeLayer(trip1Old);
+        map.removeLayer(pointsOld1);
+        map.removeLayer(trip2Old);
+        map.removeLayer(pointsOld2);
+      };
+      if (e.name == "Second Journey") {
+        $('#slider').hide();
+        $('#temporal').hide();
+        $('#slider2').show();
+        $('#temporal2').show();
+        trip2Old.addTo(map);
+        pointsOld2.addTo(map);
+        map.removeLayer(trip1New);
+        map.removeLayer(pointsNew1);
+        map.removeLayer(trip1Old);
+        map.removeLayer(pointsOld1);
+        map.removeLayer(trip2New);
+        map.removeLayer(pointsNew2);
+      }
+    });
+
     // use jquery to load GeoJSON data
     $.when(
-      $.getJSON('data/Oaxaca-Coords-Actual.geojson'),
-      $.getJSON('data/Oaxaca-Coords-Old.geojson'),
+      $.getJSON('data/Points-Contemporary-1.geojson'),
+      $.getJSON('data/Points-Contemporary-2.geojson'),
+      $.getJSON('data/Points-Old-1.geojson'),
+      $.getJSON('data/Points-Old-2.geojson'),
       $.getJSON('data/Movement-Splines-Contemporary-1.geojson'),
       $.getJSON('data/Movement-Splines-Old-1.geojson'),
       $.getJSON('data/Movement-Splines-Contemporary-2.geojson'),
-      $.getJSON('data/Movement-Splines-Old-2.geojson'), // replace
+      $.getJSON('data/Movement-Splines-Old-2.geojson')
       // when the files are done loading,
       // identify them with names and process them through a function
-    ).done(function(oaxacaPts, oaxacaPts2, newLines1, oldLines1, newLines2, oldLines2) {
+    ).done(function(newPts1, newPts2, oldPts1, oldPts2, newLines1, oldLines1, newLines2, oldLines2) {
 
       // define the value in the slider when the map loads
-      let pointOrder = $('.slider').val();
+      const pointOrder = $('.slider').val();
+      const pointOrder2 = $('.slider2').val();
 
       // initiate a leaflet GeoJSON layer with L.geoJson, feed it the data, and add to the map
-      const oaxacaLayer = L.geoJson(oaxacaPts, {
+      const newPoints1 = L.geoJson(newPts1, {
         pointToLayer: function(feature, latlng) {
           let place = feature.properties.Place;
           return L.marker(latlng, {
@@ -270,7 +435,7 @@
         // for each feature...
         onEachFeature: function(feature, layer) {
 
-          let popUp = (layer.feature.properties.Place); // the column is "Place"
+          let popUp = ('<h3>' + layer.feature.properties.Place + '</h3>'); // the column is "Place"
 
           layer.bindPopup(popUp);
 
@@ -286,11 +451,20 @@
               layer.setIcon(getHighlight(popUp));
             });
           });
+          // retrieve the ordinal value of each entry
+          const ordinal = layer.feature.properties.Order;
+
+          // filter the entries by comparing the ordinal values to the time slider values
+          if (ordinal <= pointOrder) {
+            pointsNew1.addLayer(layer);
+          } else {
+            pointsNew1.removeLayer(layer);
+          };
         }
-      }).addTo(map);
+      });
 
       // initiate a leaflet GeoJSON layer with L.geoJson, feed it the data, and add to the map
-      const oaxacaLayer2 = L.geoJson(oaxacaPts2, {
+      const newPoints2 = L.geoJson(newPts2, {
         pointToLayer: function(feature, latlng) {
           let place = feature.properties.Place;
           return L.marker(latlng, {
@@ -300,7 +474,85 @@
         // for each feature...
         onEachFeature: function(feature, layer) {
 
-          let popUp = (layer.feature.properties.Place); // replace
+          let popUp = ('<h3>' + layer.feature.properties.Place + '</h3>'); // the column is "Place"
+
+          layer.bindPopup(popUp);
+
+          layer.once('mouseover', function() {
+            layer.openPopup();
+            layer.setIcon(getHighlight(popUp));
+          });
+          layer.on('mouseout', function(e) { // On mouseout...
+            layer.closePopup(); // close the popup
+            layer.setIcon(getIcon(popUp));
+            layer.once('mouseover', function() {
+              layer.openPopup();
+              layer.setIcon(getHighlight(popUp));
+            });
+          });
+          // retrieve the ordinal value of each entry
+          const ordinal = layer.feature.properties.Order;
+
+          // filter the entries by comparing the ordinal values to the time slider values
+          if (ordinal <= pointOrder2) {
+            pointsNew2.addLayer(layer);
+          } else {
+            pointsNew2.removeLayer(layer);
+          };
+        }
+      });
+
+      // initiate a leaflet GeoJSON layer with L.geoJson, feed it the data, and add to the map
+      const oldPoints1 = L.geoJson(oldPts1, {
+        pointToLayer: function(feature, latlng) {
+          let place = feature.properties.Place;
+          return L.marker(latlng, {
+            icon: getIcon(place)
+          });
+        },
+        // for each feature...
+        onEachFeature: function(feature, layer) {
+
+          let popUp = ('<h3>' + layer.feature.properties.Place + '</h3>'); // the column is "Place"
+
+          layer.bindPopup(popUp);
+
+          layer.once('mouseover', function() {
+            layer.openPopup();
+            layer.setIcon(getHighlight(popUp));
+          });
+          layer.on('mouseout', function(e) { // On mouseout...
+            layer.closePopup(); // close the popup
+            layer.setIcon(getIcon(popUp));
+            layer.once('mouseover', function() {
+              layer.openPopup();
+              layer.setIcon(getHighlight(popUp));
+            });
+          });
+          // retrieve the ordinal value of each entry
+          const ordinal = layer.feature.properties.Order;
+
+          // filter the entries by comparing the ordinal values to the time slider values
+          if (ordinal <= pointOrder) {
+            pointsOld1.addLayer(layer);
+          } else {
+            pointsOld1.removeLayer(layer);
+          };
+        }
+      });
+
+      // initiate a leaflet GeoJSON layer with L.geoJson, feed it the data, and add to the map
+      const oldPoints2 = L.geoJson(oldPts2, {
+        pointToLayer: function(feature, latlng) {
+          let place = feature.properties.Place;
+          return L.marker(latlng, {
+            icon: getIcon(place)
+          });
+        },
+        // for each feature...
+        onEachFeature: function(feature, layer) {
+
+          let popUp = ('<h3>' + layer.feature.properties.Place + '</h3>'); // the column is "Place"
 
           layer.bindPopup(popUp);
           layer.once('mouseover', function() {
@@ -315,6 +567,15 @@
               layer.setIcon(getHighlight(popUp));
             });
           });
+          // retrieve the ordinal value of each entry
+          const ordinal = layer.feature.properties.Order;
+
+          // filter the entries by comparing the ordinal values to the time slider values
+          if (ordinal <= pointOrder2) {
+            pointsOld2.addLayer(layer);
+          } else {
+            pointsOld2.removeLayer(layer);
+          };
         }
       });
 
@@ -336,9 +597,20 @@
           };
         },
         onEachFeature: function(feature, layer) {
+
           var props = layer.feature.properties;
+
+          // retrieve the ordinal value of each entry
+          const ordinal = layer.feature.properties.id;
+
+          // filter the entries by comparing the ordinal values to the time slider values
+          if (ordinal < pointOrder) {
+            trip1New.addLayer(layer);
+          } else {
+            trip1New.removeLayer(layer);
+          };
         }
-      }).addTo(map);
+      });
 
       const arrows2 = L.geoJson(oldLines1, {
         // Style the arrowheads
@@ -358,7 +630,18 @@
           };
         },
         onEachFeature: function(feature, layer) {
+
           var props = layer.feature.properties;
+
+          // retrieve the ordinal value of each entry
+          const ordinal = layer.feature.properties.id;
+
+          // filter the entries by comparing the ordinal values to the time slider values
+          if (ordinal < pointOrder) {
+            trip1Old.addLayer(layer);
+          } else {
+            trip1Old.removeLayer(layer);
+          };
         }
       });
 
@@ -373,16 +656,27 @@
         // Style the layer
         style: function(feature) {
           return {
-            color: '#9400d3',
+            color: '#4f0809',
             dashArray: '10, 5',
             weight: 2.5,
             opacity: 0.65
           };
         },
         onEachFeature: function(feature, layer) {
+
           var props = layer.feature.properties;
+
+          // retrieve the ordinal value of each entry
+          const ordinal = layer.feature.properties.id;
+
+          // filter the entries by comparing the ordinal values to the time slider values
+          if (ordinal < pointOrder) {
+            trip2New.addLayer(layer);
+          } else {
+            trip2New.removeLayer(layer);
+          };
         }
-      }).addTo(map);
+      });
 
       const arrows4 = L.geoJson(oldLines2, {
         // Style the arrowheads
@@ -395,50 +689,53 @@
         // Style the layer
         style: function(feature) {
           return {
-            color: '#9400d3',
+            color: '#4f0809',
             dashArray: '10, 5',
             weight: 2.5,
             opacity: 0.65
           };
         },
         onEachFeature: function(feature, layer) {
-          var props = layer.feature.properties;
-        }
-      });
 
-      // on base map change, swap one set of points for the other
-      map.on('baselayerchange', function(e) {
-        if (e.name == "1883 Map") {
-          oaxacaLayer2.addTo(map);
-          arrows2.addTo(map);
-          arrows4.addTo(map);
-          map.removeLayer(oaxacaLayer);
-          map.removeLayer(arrows1);
-          map.removeLayer(arrows3);
-        }
-        if (e.name == "OpenStreetMap" || e.name == "Contemporary Vintage") {
-          oaxacaLayer.addTo(map);
-          arrows1.addTo(map);
-          arrows3.addTo(map);
-          map.removeLayer(oaxacaLayer2);
-          map.removeLayer(arrows2);
-          map.removeLayer(arrows4);
+          var props = layer.feature.properties;
+
+          // retrieve the ordinal value of each entry
+          const ordinal = layer.feature.properties.id;
+
+          // filter the entries by comparing the ordinal values to the time slider values
+          if (ordinal < pointOrder) {
+            trip2Old.addLayer(layer);
+          } else {
+            trip2Old.removeLayer(layer);
+          };
         }
       });
 
       // call functions defined below
-      sequenceUI(); // calls the time slider and sends the layer to it
+      sequenceUI(newPoints1, newPoints2, oldPoints1, oldPoints2, arrows1, arrows2, arrows3, arrows4); // calls the time slider and sends the layers to it
       createTemporalLegend(pointOrder); // calls the createTemporalLegend function
+      createTemporalLegend2(pointOrder2);
+      updateData(newPoints1, oldPoints1, arrows1, arrows2, pointOrder); // calls the updateData function to update the map data
+      updateData2(newPoints2, oldPoints2, arrows3, arrows4, pointOrder2);
+
     });
 
     // call the UI slider with a function called "sequenceUI"
-    function sequenceUI() { // feed it the data
+    function sequenceUI(newPoints1, newPoints2, oldPoints1, oldPoints2, arrows1, arrows2, arrows3, arrows4) { // feed it the data
 
       // use the jQuery ajax method to get the slider element
       $('.slider')
         .on('input change', function() { // when the input changes...
-          let pointOrder = $(this).val(); // identify the year selected with "pointOrder"
+          const pointOrder = $(this).val(); // identify the year selected with "pointOrder"
           createTemporalLegend(pointOrder); // call the createTemporalLegend function
+          updateData(newPoints1, oldPoints1, arrows1, arrows2, pointOrder); // calls the updateData function to update the map data
+        });
+
+      $('.slider2')
+        .on('input change', function() { // when the input changes...
+          const pointOrder2 = $(this).val(); // identify the year selected with "pointOrder"
+          createTemporalLegend2(pointOrder2); // call the createTemporalLegend function
+          updateData2(newPoints2, oldPoints2, arrows3, arrows4, pointOrder2); // calls the updateData2 function to update the map data
         });
 
     }; // End sequenceUI function
@@ -466,15 +763,17 @@
       };
 
       if (pointOrder == 1) {
-        var date = "1874\/02\/02 12:00:00";
+        var date = "1874\/02\/02 05:00:00 AM";
       } if (pointOrder == 2) {
-        var date = "1874\/02\/03 07:00:00";
+        var date = "1874\/02\/02 12:00:00 PM";
       } if (pointOrder == 3) {
-        var date = "1874\/02\/03 03:00:00";
+        var date = "1874\/02\/03 07:00:00 AM";
       } if (pointOrder == 4) {
-        var date = "1874\/02\/04 09:00:00";
+        var date = "1874\/02\/03 03:00:00 PM";
       } if (pointOrder == 5) {
-        var date = "1874\/02\/09 12:00:00";
+        var date = "1874\/02\/04 09:00:00 AM";
+      } if (pointOrder == 6) {
+        var date = "1874\/02\/09 12:00:00 PM";
       };
 
       $('#temporal span').html(date); //change grade value to that currently selected by UI slider
@@ -482,7 +781,182 @@
       temporalLegend.addTo(map); // add the temporal legend to the map
 
     }; // End createTemporalLegend function
+
+    // Add a temporal legend in sync with the UI slider
+    function createTemporalLegend2(pointOrder2) { // feed it the selected order
+
+      // define the temporal legend with a Leaflet control
+      const temporalLegend2 = L.control({
+        position: 'bottomleft' // place the temporal legend at bottom left corner
+      });
+
+      // when added to the map
+      temporalLegend2.onAdd = function(map) {
+
+        const div = L.DomUtil.get("temporal2"); // get the div
+
+        // disable the mouse events
+        L.DomEvent.addListener(div, 'mousedown', function(e) {
+          L.DomEvent.stopPropagation(e);
+        });
+
+        return div; // return the div from the function
+
+      };
+
+      if (pointOrder2 == 1) {
+        var date2 = "1874\/05\/26 05:00:00 AM";
+      } if (pointOrder2 == 2) {
+        var date2 = "1874\/05\/26 12:00:00 PM";
+      } if (pointOrder2 == 3) {
+        var date2 = "1874\/05\/27 07:00:00 AM";
+      } if (pointOrder2 == 4) {
+        var date2 = "1874\/05\/27 03:00:00 PM";
+      } if (pointOrder2 == 5) {
+        var date2 = "1874\/05\/28 09:00:00 AM";
+      } if (pointOrder2 == 6) {
+        var date2 = "1874\/05\/28 01:00:00 PM";
+      } if (pointOrder2 == 7) {
+        var date2 = "1874\/05\/28 02:00:00 PM";
+      };
+
+      $('#temporal2 span').html(date2); //change grade value to that currently selected by UI slider
+
+      temporalLegend2.addTo(map); // add the temporal legend to the map
+
+    }; // End createTemporalLegend2 function
+
+    // Define updateData function and feed it the layer data and the user-selected date
+    function updateData(newPoints1, oldPoints1, arrows1, arrows2, pointOrder) {
+
+      // access each layer in the point data
+      newPoints1.eachLayer(function(layer) {
+
+        // retrieve the ordinal value of each entry
+        const ordinal = layer.feature.properties.Order;
+
+        // filter the entries by comparing the ordinal values to the time slider values
+        if (ordinal <= pointOrder) {
+          pointsNew1.addLayer(layer);
+        } else {
+          pointsNew1.removeLayer(layer);
+        };
+
+      });
+
+      // access each layer in the point data
+      oldPoints1.eachLayer(function(layer) {
+
+        // retrieve the ordinal value of each entry
+        const ordinal = layer.feature.properties.Order;
+
+        // filter the entries by comparing the ordinal values to the time slider values
+        if (ordinal <= pointOrder) {
+          pointsOld1.addLayer(layer);
+        } else {
+          pointsOld1.removeLayer(layer);
+        };
+
+      });
+
+      // access each layer in the line data
+      arrows1.eachLayer(function(layer) {
+
+        // retrieve the ordinal value of each entry
+        const ordinal = layer.feature.properties.id;
+
+        // filter the entries by comparing the ordinal values to the time slider values
+        if (ordinal < pointOrder) {
+          trip1New.addLayer(layer);
+        } else {
+          trip1New.removeLayer(layer);
+        };
+
+      });
+
+      // access each layer in the line data
+      arrows2.eachLayer(function(layer) {
+
+        // retrieve the ordinal value of each entry
+        const ordinal = layer.feature.properties.id;
+
+        // filter the entries by comparing the ordinal values to the time slider values
+        if (ordinal < pointOrder) {
+          trip1Old.addLayer(layer);
+        } else {
+          trip1Old.removeLayer(layer);
+        };
+
+      });
+
+    }; // End updateData function
+
+    function updateData2(newPoints2, oldPoints2, arrows3, arrows4, pointOrder2) {
+
+      // access each layer in the point data
+      newPoints2.eachLayer(function(layer) {
+
+        // retrieve the ordinal value of each entry
+        const ordinal = layer.feature.properties.Order;
+
+        // filter the entries by comparing the ordinal values to the time slider values
+        if (ordinal <= pointOrder2) {
+          pointsNew2.addLayer(layer);
+        } else {
+          pointsNew2.removeLayer(layer);
+        };
+
+      });
+
+      // access each layer in the point data
+      oldPoints2.eachLayer(function(layer) {
+
+        // retrieve the ordinal value of each entry
+        const ordinal = layer.feature.properties.Order;
+
+        // filter the entries by comparing the ordinal values to the time slider values
+        if (ordinal <= pointOrder2) {
+          pointsOld2.addLayer(layer);
+        } else {
+          pointsOld2.removeLayer(layer);
+        };
+
+      });
+
+      // access each layer in the line data
+      arrows3.eachLayer(function(layer) {
+
+        // retrieve the ordinal value of each entry
+        const ordinal = layer.feature.properties.id;
+
+        // filter the entries by comparing the ordinal values to the time slider values
+        if (ordinal < pointOrder2) {
+          trip2New.addLayer(layer);
+        } else {
+          trip2New.removeLayer(layer);
+        };
+
+      });
+
+      // access each layer in the line data
+      arrows4.eachLayer(function(layer) {
+
+        // retrieve the ordinal value of each entry
+        const ordinal = layer.feature.properties.id;
+
+        // filter the entries by comparing the ordinal values to the time slider values
+        if (ordinal < pointOrder2) {
+          trip2Old.addLayer(layer);
+        } else {
+          trip2Old.removeLayer(layer);
+        };
+
+      });
+
+    }; // End updateData2 function
+
   </script>
+
 </body>
 
 </html>
