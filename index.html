@@ -598,7 +598,38 @@
         },
         onEachFeature: function(feature, layer) {
 
-          var props = layer.feature.properties;
+          let popUp = ('<h3>Trip Notes:<br>' + 'Left ' + layer.feature.properties.Beginning + ' at ' + layer.feature.properties.T_Departure + ' on ' + layer.feature.properties.Departure + '.' +
+                       '<br>Arrived at ' + layer.feature.properties.End + ' at ' + layer.feature.properties.T_Arrival + ' on ' + layer.feature.properties.Arrival + '.</h3>'); // the column is "Place"
+
+          layer.bindPopup(popUp);
+
+          layer.once('mouseover', function() {
+            layer.openPopup();
+            layer.setStyle({
+              color: 'orange',
+              dashArray: '10, 5',
+              weight: 2.5,
+              opacity: 0.65
+            });
+          });
+          layer.on('mouseout', function(e) { // On mouseout...
+            layer.closePopup(); // close the popup
+            layer.setStyle({
+              color: '#4f0809',
+              dashArray: '10, 5',
+              weight: 2.5,
+              opacity: 0.65
+            });
+            layer.once('mouseover', function() {
+              layer.openPopup();
+              layer.setStyle({
+                color: 'orange',
+                dashArray: '10, 5',
+                weight: 2.5,
+                opacity: 0.65
+              });
+            });
+          });
 
           // retrieve the ordinal value of each entry
           const ordinal = layer.feature.properties.id;
@@ -631,7 +662,38 @@
         },
         onEachFeature: function(feature, layer) {
 
-          var props = layer.feature.properties;
+          let popUp = ('<h3>Trip Notes:<br>' + 'Left ' + layer.feature.properties.Beginning + ' at ' + layer.feature.properties.T_Departure + ' on ' + layer.feature.properties.Departure + '.' +
+                       '<br>Arrived at ' + layer.feature.properties.End + ' at ' + layer.feature.properties.T_Arrival + ' on ' + layer.feature.properties.Arrival + '.</h3>'); // the column is "Place"
+
+          layer.bindPopup(popUp);
+
+          layer.once('mouseover', function() {
+            layer.openPopup();
+            layer.setStyle({
+              color: 'orange',
+              dashArray: '10, 5',
+              weight: 2.5,
+              opacity: 0.65
+            });
+          });
+          layer.on('mouseout', function(e) { // On mouseout...
+            layer.closePopup(); // close the popup
+            layer.setStyle({
+              color: '#4f0809',
+              dashArray: '10, 5',
+              weight: 2.5,
+              opacity: 0.65
+            });
+            layer.once('mouseover', function() {
+              layer.openPopup();
+              layer.setStyle({
+                color: 'orange',
+                dashArray: '10, 5',
+                weight: 2.5,
+                opacity: 0.65
+              });
+            });
+          });
 
           // retrieve the ordinal value of each entry
           const ordinal = layer.feature.properties.id;
@@ -664,7 +726,38 @@
         },
         onEachFeature: function(feature, layer) {
 
-          var props = layer.feature.properties;
+          let popUp = ('<h3>Trip Notes:<br>' + 'Left ' + layer.feature.properties.Beginning + ' at ' + layer.feature.properties.T_Departure + ' on ' + layer.feature.properties.D_Date + '.' +
+                       '<br>Arrived at ' + layer.feature.properties.End + ' at ' + layer.feature.properties.T_Arrival + ' on ' + layer.feature.properties.A_Date + '.</h3>'); // the column is "Place"
+
+          layer.bindPopup(popUp);
+
+          layer.once('mouseover', function() {
+            layer.openPopup();
+            layer.setStyle({
+              color: 'orange',
+              dashArray: '10, 5',
+              weight: 2.5,
+              opacity: 0.65
+            });
+          });
+          layer.on('mouseout', function(e) { // On mouseout...
+            layer.closePopup(); // close the popup
+            layer.setStyle({
+              color: '#4f0809',
+              dashArray: '10, 5',
+              weight: 2.5,
+              opacity: 0.65
+            });
+            layer.once('mouseover', function() {
+              layer.openPopup();
+              layer.setStyle({
+                color: 'orange',
+                dashArray: '10, 5',
+                weight: 2.5,
+                opacity: 0.65
+              });
+            });
+          });
 
           // retrieve the ordinal value of each entry
           const ordinal = layer.feature.properties.id;
@@ -697,7 +790,38 @@
         },
         onEachFeature: function(feature, layer) {
 
-          var props = layer.feature.properties;
+          let popUp = ('<h3>Trip Notes:<br>' + 'Left ' + layer.feature.properties.Beginning + ' at ' + layer.feature.properties.T_Departure + ' on ' + layer.feature.properties.D_Date + '.' +
+                       '<br>Arrived at ' + layer.feature.properties.End + ' at ' + layer.feature.properties.T_Arrival + ' on ' + layer.feature.properties.A_Date + '.</h3>'); // the column is "Place"
+
+          layer.bindPopup(popUp);
+
+          layer.once('mouseover', function() {
+            layer.openPopup();
+            layer.setStyle({
+              color: 'orange',
+              dashArray: '10, 5',
+              weight: 2.5,
+              opacity: 0.65
+            });
+          });
+          layer.on('mouseout', function(e) { // On mouseout...
+            layer.closePopup(); // close the popup
+            layer.setStyle({
+              color: '#4f0809',
+              dashArray: '10, 5',
+              weight: 2.5,
+              opacity: 0.65
+            });
+            layer.once('mouseover', function() {
+              layer.openPopup();
+              layer.setStyle({
+                color: 'orange',
+                dashArray: '10, 5',
+                weight: 2.5,
+                opacity: 0.65
+              });
+            });
+          });
 
           // retrieve the ordinal value of each entry
           const ordinal = layer.feature.properties.id;
