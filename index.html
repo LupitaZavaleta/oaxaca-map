@@ -44,7 +44,7 @@
       bottom: 10px;
       left: 189px;
       z-index: 1000;
-      background-color: #FFFFFF;
+      background: #f2eecb;
       border-radius: 3px;
       box-shadow: 0px 0px 0px 2px rgba(0, 0, 0, 0.3);
     }
@@ -53,7 +53,7 @@
     #temporal, #temporal2 {
       height: 25px;
       width: 166px;
-      background-color: #FFFFFF;
+      background: #f2eecb;
       border-radius: 3px;
       box-shadow: 0px 0px 0px 2px rgba(0, 0, 0, 0.3);
     }
@@ -75,7 +75,7 @@
       height: 60px;
       top: 10px;
       left: 12px;
-      background-color: rgba(255, 255, 255, 1.0);
+      background-color: rgba(242, 238, 203, 1.0);
       box-shadow: 0px 0px 0px 2px rgba(0, 0, 0, 0.3);
       border-radius: 3px;
       z-index: 800;
@@ -131,8 +131,23 @@
       top: 70px;
     }
 
+    .leaflet-control-layers-expanded {
+      background: #f2eecb;
+    }
+
     .leaflet-control-layers-expanded .leaflet-control-layers-list {
       font-family: 'Playfair Display', serif;
+    }
+
+    /* Leaflet Zoom Control Styles */
+    .leaflet-control-zoom a{
+      background: #f2eecb;
+    }
+
+    /* Leaflet Popup Styles */
+    .leaflet-popup-content-wrapper,
+    .leaflet-popup-tip {
+      background: #f2eecb;
     }
   </style>
 </head>
@@ -210,6 +225,7 @@
     // the bug icon
     const bugIcon = L.ExtraMarkers.icon({
       icon: 'fa-bug',
+      iconColor: '#f2eecb',
       markerColor: 'purple',
       shape: 'star',
       prefix: 'fas'
@@ -218,6 +234,7 @@
     // the highlighted bug icon
     const bugHighlight = L.ExtraMarkers.icon({
       icon: 'fa-bug',
+      iconColor: '#f2eecb',
       markerColor: 'yellow',
       shape: 'star',
       prefix: 'fas'
@@ -226,6 +243,7 @@
     // the coffee icon
     const coffeeIcon = L.ExtraMarkers.icon({
       icon: 'fa-coffee',
+      iconColor: '#f2eecb',
       markerColor: 'purple',
       shape: 'star',
       prefix: 'fa'
@@ -234,6 +252,7 @@
     // the highlighted coffee icon
     const coffeeHighlight = L.ExtraMarkers.icon({
       icon: 'fa-coffee',
+      iconColor: '#f2eecb',
       markerColor: 'yellow',
       shape: 'star',
       prefix: 'fa'
@@ -435,9 +454,9 @@
         // for each feature...
         onEachFeature: function(feature, layer) {
 
-          let popUp = ('<h3>' + layer.feature.properties.Place + '</h3>'); // the column is "Place"
+          let popUp = layer.feature.properties.Place; // the column is "Place"
 
-          layer.bindPopup(popUp);
+          layer.bindPopup('<h3>' + popUp + '</h3>');
 
           layer.once('mouseover', function() {
             layer.openPopup();
@@ -474,9 +493,9 @@
         // for each feature...
         onEachFeature: function(feature, layer) {
 
-          let popUp = ('<h3>' + layer.feature.properties.Place + '</h3>'); // the column is "Place"
+          let popUp = layer.feature.properties.Place; // the column is "Place"
 
-          layer.bindPopup(popUp);
+          layer.bindPopup('<h3>' + popUp + '</h3>');
 
           layer.once('mouseover', function() {
             layer.openPopup();
@@ -513,9 +532,9 @@
         // for each feature...
         onEachFeature: function(feature, layer) {
 
-          let popUp = ('<h3>' + layer.feature.properties.Place + '</h3>'); // the column is "Place"
+          let popUp = layer.feature.properties.Place; // the column is "Place"
 
-          layer.bindPopup(popUp);
+          layer.bindPopup('<h3>' + popUp + '</h3>');
 
           layer.once('mouseover', function() {
             layer.openPopup();
@@ -552,9 +571,9 @@
         // for each feature...
         onEachFeature: function(feature, layer) {
 
-          let popUp = ('<h3>' + layer.feature.properties.Place + '</h3>'); // the column is "Place"
+          let popUp = layer.feature.properties.Place; // the column is "Place"
 
-          layer.bindPopup(popUp);
+          layer.bindPopup('<h3>' + popUp + '</h3>');
           layer.once('mouseover', function() {
             layer.openPopup();
             layer.setIcon(getHighlight(popUp));
