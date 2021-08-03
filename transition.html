@@ -125,7 +125,7 @@
   <script>
     // define map options
     const mapOptions = {
-      center: [16.1, -96.416667 /*lat, long*/ ], // center the map on the central coordinates for Oaxaca
+      center: [16.25, -96.116667 /*lat, long*/ ], // center the map on the central coordinates for Oaxaca
       zoom: 9, // set initial zoom
       minZoom: 5, // set equal to tile zoom intervals
       maxZoom: 11, // set equal to tile zoom intervals
@@ -146,6 +146,74 @@
     const Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
     	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
     }).addTo(map);
+
+    // the bug icon
+    const bugIcon = L.ExtraMarkers.icon({
+      icon: 'fa-bug',
+      iconColor: '#f2eecb',
+      markerColor: 'purple',
+      shape: 'star',
+      prefix: 'fas'
+    });
+
+    // the highlighted bug icon
+    const bugHighlight = L.ExtraMarkers.icon({
+      icon: 'fa-bug',
+      iconColor: '#f2eecb',
+      markerColor: 'yellow',
+      shape: 'star',
+      prefix: 'fas'
+    });
+
+    // the coffee icon
+    const coffeeIcon = L.ExtraMarkers.icon({
+      icon: 'fa-coffee',
+      iconColor: '#f2eecb',
+      markerColor: 'purple',
+      shape: 'star',
+      prefix: 'fa'
+    });
+
+    // the highlighted coffee icon
+    const coffeeHighlight = L.ExtraMarkers.icon({
+      icon: 'fa-coffee',
+      iconColor: '#f2eecb',
+      markerColor: 'yellow',
+      shape: 'star',
+      prefix: 'fa'
+    });
+
+    // Add functions to switch the icons by filter type
+    function getIcon(d) {
+      return d === 'Miahuatlán de Porfirio Díaz' ? bugIcon :
+        d === 'San José del Pacífico' ? bugIcon :
+        d === 'San Miguel Suchixtepec' ? bugIcon :
+        d === 'San Pedro el Alto' ? bugIcon :
+        d === 'Río Copalita' ? bugIcon :
+        d === 'Cerro de la Pluma' ? coffeeIcon :
+        d === 'Finca cafetalera La Providencia' ? coffeeIcon :
+        bugIcon;
+    };
+
+    function getHighlight(d) {
+      return d === 'Miahuatlán de Porfirio Díaz' ? bugHighlight :
+        d === 'San José del Pacífico' ? bugHighlight :
+        d === 'San Miguel Suchixtepec' ? bugHighlight :
+        d === 'San Pedro el Alto' ? bugHighlight :
+        d === 'Río Copalita' ? bugHighlight :
+        d === 'Cerro de la Pluma' ? coffeeHighlight :
+        d === 'Finca cafetalera La Providencia' ? coffeeHighlight :
+        bugHighlight;
+    };
+
+    // Empty layer groups for overlays
+    const pointsOld1 = L.layerGroup(); // old map points on the first voyage
+    const pointsOld2 = L.layerGroup(); // old map points on the second voyage
+    const trip1Old = L.layerGroup(); // the first voyage on the old map
+    const trip2Old = L.layerGroup(); // the second voyage on the old map
+
+    // Add a scale bar to the map
+    L.control.scale({position:'bottomright'}).addTo(map);
 
     // call the map transition
     transitionMap();
