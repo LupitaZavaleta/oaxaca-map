@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <!-- Give the page a title -->
+  <title>1883 Map</title>
+  <!-- Add a link to the Leaflet CSS library so you can reference it for styling your map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+  <!-- All the CSS code goes inside the style tags below -->
+  <style>
+    /* style the body */
+    body {
+      margin: 0px;
+      height: 100%;
+      width: 100%;
+    }
+
+    /* style the map */
+    #map {
+      position: absolute;
+      width: 100%;
+      top: 0px;
+      bottom: 0;
+    }
+
+    /* the zoom control */
+    .leaflet-top {
+      bottom: 0;
+    }
+
+    .leaflet-top .leaflet-control-zoom {
+      top: 0px;
+    }
+
+    /* Leaflet Zoom Control Styles */
+    .leaflet-control-zoom a{
+      background: #f2eecb;
+    }
+
+  </style>
+</head>
+<body>
+  <!-- The map -->
+  <div id="map"></div>
+  <!-- Add a link to the Leaflet JavaScript library so you can reference it for building your map -->
+  <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+  <!-- All JavaScript goes inside the script tags below -->
+  <script>
+    // define map options
+    const mapOptions = {
+      center: [16.80, -96.116667 /*lat, long*/ ], // center the map on the central coordinates for Oaxaca
+      zoom: 8, // set initial zoom
+      minZoom: 5, // set equal to tile zoom intervals
+      maxZoom: 11, // set equal to tile zoom intervals
+    };
+
+    // define the map with the options above
+    const map = L.map("map", mapOptions);
+
+    // 1883 map tiles
+    const oaxacaMap = L.tileLayer('tiles/{z}/{x}/{y}.png', {
+      tms: true,
+      opacity: 1.0,
+      attribution: "",
+      minZoom: 5,
+      maxZoom: 11
+    }).addTo(map);
+
+    // Add a scale bar to the map
+    L.control.scale({position:'bottomright'}).addTo(map);
+
+  </script>
+</body>
+</html>
