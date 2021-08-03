@@ -403,10 +403,15 @@
     // define the transition function
     function transitionMap() {
 
+      // first transition
+      setTimeout(function() {
+        map.addLayer(oaxacaMap);
+      }, 3000);
+
+      // second transition
       setTimeout(function() {
         map.removeLayer(pointsOld2);
         map.removeLayer(trip2Old);
-        map.addLayer(oaxacaMap);
         map.addLayer(pointsOld1);
         map.addLayer(trip1Old);
       }, 5000);
