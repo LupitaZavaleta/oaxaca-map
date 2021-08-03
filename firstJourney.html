@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <!-- Give the page a title -->
+  <title>1883 Map</title>
+  <!-- Add a link to the Leaflet CSS library so you can reference it for styling your map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+  <!--for icon support-->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/v4-shims.css">
+  <!-- for icon markers -->
+  <link rel="stylesheet" href="css/leaflet.extra-markers.min.css">
+  <!-- Embed Playfair font from Google -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
+  <!-- All the CSS code goes inside the style tags below -->
+  <style>
+    /* style the body */
+    body {
+      margin: 0px;
+      height: 100%;
+      width: 100%;
+    }
+
+    /* style the map */
+    #map {
+      position: absolute;
+      width: 100%;
+      top: 0px;
+      bottom: 0;
+    }
+
+    /* the zoom control */
+    .leaflet-top {
+      bottom: 0;
+    }
+
+    .leaflet-top .leaflet-control-zoom {
+      top: 0px;
+    }
+
+    /* Leaflet Zoom Control Styles */
+    .leaflet-control-zoom a{
+      background: #f2eecb;
+    }
+
+    /* Leaflet Popup Styles */
+    .leaflet-popup-content-wrapper,
+    .leaflet-popup-tip {
+      background: #f2eecb;
+    }
+
+    /* Set and style fonts for text in map */
+    h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 12px;
+      display: inline-block;
+      color: black;
+      margin-top: 0.0em;
+      margin-bottom: 0.0em;
+      margin-left: 0.0em;
+      margin-right: 0;
+      font-weight: normal;
+    }
+
+  </style>
+</head>
+<body>
+  <!-- The map -->
+  <div id="map"></div>
+  <!-- Add a link to the Leaflet JavaScript library so you can reference it for building your map -->
+  <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+  <!-- for icon markers -->
+  <script src="js/leaflet.extra-markers.min.js"></script>
+  <!-- Add a link to the jQuery JavaScript library so you can leverage ajax methods to load your data -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <!-- All JavaScript goes inside the script tags below -->
+  <script>
+    // define map options
+    const mapOptions = {
+      center: [16.3, -96.476667 /*lat, long*/ ], // center the map on the central coordinates for Oaxaca
+      zoom: 11, // set initial zoom
+      minZoom: 5, // set equal to tile zoom intervals
+      maxZoom: 11, // set equal to tile zoom intervals
+    };
+
+    // define the map with the options above
+    const map = L.map("map", mapOptions);
+
+    // 1883 map tiles
+    const oaxacaMap = L.tileLayer('tiles/{z}/{x}/{y}.png', {
+      tms: true,
+      opacity: 1.0,
+      attribution: "",
+      minZoom: 5,
+      maxZoom: 11
+    }).addTo(map);
+
+    // Add a scale bar to the map
+    L.control.scale({position:'bottomright'}).addTo(map);
+
+    // the bug icon
+    const bugIcon = L.ExtraMarkers.icon({
+      icon: 'fa-bug',
+      iconColor: '#f2eecb',
+      markerColor: 'purple',
+      shape: 'star',
+      prefix: 'fas'
+    });
+
+    // the highlighted bug icon
+    const bugHighlight = L.ExtraMarkers.icon({
+      icon: 'fa-bug',
+      iconColor: '#f2eecb',
+      markerColor: 'yellow',
+      shape: 'star',
+      prefix: 'fas'
+    });
+
+    // the coffee icon
+    const coffeeIcon = L.ExtraMarkers.icon({
+      icon: 'fa-coffee',
+      iconColor: '#f2eecb',
+      markerColor: 'purple',
+      shape: 'star',
+      prefix: 'fa'
+    });
+
+    // the highlighted coffee icon
+    const coffeeHighlight = L.ExtraMarkers.icon({
+      icon: 'fa-coffee',
+      iconColor: '#f2eecb',
+      markerColor: 'yellow',
+      shape: 'star',
+      prefix: 'fa'
+    });
+
+    // Add functions to switch the icons by filter type
+    function getIcon(d) {
+      return d === 'Miahuatlán de Porfirio Díaz' ? bugIcon :
+        d === 'San José del Pacífico' ? bugIcon :
+        d === 'San Miguel Suchixtepec' ? bugIcon :
+        d === 'San Pedro el Alto' ? bugIcon :
+        d === 'Río Copalita' ? bugIcon :
+        d === 'Cerro de la Pluma' ? coffeeIcon :
+        d === 'Finca cafetalera La Providencia' ? coffeeIcon :
+        bugIcon;
+    };
+
+    function getHighlight(d) {
+      return d === 'Miahuatlán de Porfirio Díaz' ? bugHighlight :
+        d === 'San José del Pacífico' ? bugHighlight :
+        d === 'San Miguel Suchixtepec' ? bugHighlight :
+        d === 'San Pedro el Alto' ? bugHighlight :
+        d === 'Río Copalita' ? bugHighlight :
+        d === 'Cerro de la Pluma' ? coffeeHighlight :
+        d === 'Finca cafetalera La Providencia' ? coffeeHighlight :
+        bugHighlight;
+    };
+
+    // Empty layer groups for overlays
+    const pointsOld1 = L.layerGroup().addTo(map); // old map points on the second voyage
+    const trip1Old = L.layerGroup().addTo(map); // the first voyage on the old map
+
+    // use jquery to load GeoJSON data
+    $.when(
+      $.getJSON('data/Points-Old-1.geojson'),
+      $.getJSON('data/Movement-Splines-Old-1.geojson')
+      // when the files are done loading,
+      // identify them with names and process them through a function
+    ).done(function(oldPts1, oldLines1) {
+
+      // initiate a leaflet GeoJSON layer with L.geoJson, feed it the data, and add to the map
+      const oldPoints1 = L.geoJson(oldPts1, {
+        pointToLayer: function(feature, latlng) {
+          let place = feature.properties.Place;
+          return L.marker(latlng, {
+            icon: getIcon(place)
+          });
+        },
+        // for each feature...
+        onEachFeature: function(feature, layer) {
+
+          let popUp = layer.feature.properties.Place; // the column is "Place"
+
+          layer.bindPopup('<h3>' + popUp + '</h3>');
+          layer.once('mouseover', function() {
+            layer.openPopup();
+            layer.setIcon(getHighlight(popUp));
+          });
+          layer.on('mouseout', function(e) { // On mouseout...
+            layer.closePopup(); // close the popup
+            layer.setIcon(getIcon(popUp));
+            layer.once('mouseover', function() {
+              layer.openPopup();
+              layer.setIcon(getHighlight(popUp));
+            });
+          });
+
+          if (popUp == "Miahuatlán de Porfirio Díaz") {
+            pointsOld1.addLayer(layer);
+          } if (popUp == "San José del Pacífico") {
+            pointsOld1.addLayer(layer);
+          } if (popUp == "San Miguel Suchixtepec") {
+            pointsOld1.addLayer(layer);
+          } if (popUp == "San Pedro el Alto") {
+            pointsOld1.addLayer(layer);
+          } if (popUp == "Río Copalita") {
+            pointsOld1.addLayer(layer);
+          };
+
+        }
+      });
+
+      const arrows2 = L.geoJson(oldLines1, {
+        // Style the arrowheads
+        arrowheads: {
+          yawn: 30,
+          size: '10px',
+          frequency: 'endonly',
+          opacity: 0.65
+        },
+        // Style the layer
+        style: function(feature) {
+          return {
+            color: '#4f0809',
+            dashArray: '10, 5',
+            weight: 2.5,
+            opacity: 0.65
+          };
+        },
+        onEachFeature: function(feature, layer) {
+
+          let popUp = ('<h3>Trip Notes:<br>' + 'Left ' + layer.feature.properties.Beginning + ' at ' + layer.feature.properties.T_Departure + ' on ' + layer.feature.properties.Departure + '.' +
+                       '<br>Arrived at ' + layer.feature.properties.End + ' at ' + layer.feature.properties.T_Arrival + ' on ' + layer.feature.properties.Arrival + '.</h3>'); // the column is "Place"
+
+          layer.bindPopup(popUp);
+
+          layer.once('mouseover', function() {
+            layer.openPopup();
+            layer.setStyle({
+              color: 'orange',
+              dashArray: '10, 5',
+              weight: 2.5,
+              opacity: 0.65
+            });
+          });
+          layer.on('mouseout', function(e) { // On mouseout...
+            layer.closePopup(); // close the popup
+            layer.setStyle({
+              color: '#4f0809',
+              dashArray: '10, 5',
+              weight: 2.5,
+              opacity: 0.65
+            });
+            layer.once('mouseover', function() {
+              layer.openPopup();
+              layer.setStyle({
+                color: 'orange',
+                dashArray: '10, 5',
+                weight: 2.5,
+                opacity: 0.65
+              });
+            });
+          });
+
+          if (layer.feature.properties.id == 1) {
+            trip1Old.addLayer(layer);
+          } if (layer.feature.properties.id == 2) {
+            trip1Old.addLayer(layer);
+          } if (layer.feature.properties.id == 3) {
+            trip1Old.addLayer(layer);
+          } if (layer.feature.properties.id == 4) {
+            trip1Old.addLayer(layer);
+          } if (layer.feature.properties.id == 5) {
+            trip1Old.addLayer(layer);
+          };
+        }
+      });
+
+    });
+
+
+
+  </script>
+</body>
+</html>
