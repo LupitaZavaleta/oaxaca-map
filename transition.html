@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <!-- Give the page a title -->
+  <title>Transition</title>
+  <!-- Add a link to the Leaflet CSS library so you can reference it for styling your map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+  <!--for icon support-->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/v4-shims.css">
+  <!-- for icon markers -->
+  <link rel="stylesheet" href="css/leaflet.extra-markers.min.css">
+  <!-- Embed Playfair font from Google -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
+  <!-- All the CSS code goes inside the style tags below -->
+  <style>
+    /* style the body */
+    body {
+      margin: 0px;
+      height: 100%;
+      width: 100%;
+    }
+
+    /* style the map */
+    #map {
+      position: absolute;
+      width: 100%;
+      top: 0px;
+      bottom: 0;
+    }
+
+    /* Set and style fonts for text in map */
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      display: inline-block;
+      color: black;
+      margin-top: 0.10em;
+      margin-bottom: 0.0em;
+      margin-left: 0.5em;
+      margin-right: 0;
+      font-weight: normal;
+    }
+
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 11px;
+      display: inline-block;
+      color: black;
+      margin-top: 0.0em;
+      margin-bottom: 0.0em;
+      margin-left: 1.0em;
+      margin-right: 0;
+      font-weight: normal;
+    }
+
+    h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 12px;
+      display: inline-block;
+      color: black;
+      margin-top: 0.0em;
+      margin-bottom: 0.0em;
+      margin-left: 0.0em;
+      margin-right: 0;
+      font-weight: normal;
+    }
+
+    a {
+      color: #f7f4ea;
+    }
+
+    /* the zoom control */
+    .leaflet-top {
+      bottom: 0;
+    }
+
+    .leaflet-top .leaflet-control-zoom {
+      top: 0px;
+    }
+
+    .leaflet-control-layers-expanded {
+      background: #f2eecb;
+    }
+
+    .leaflet-control-layers-expanded .leaflet-control-layers-list {
+      font-family: 'Playfair Display', serif;
+    }
+
+    /* Leaflet Zoom Control Styles */
+    .leaflet-control-zoom a{
+      background: #f2eecb;
+    }
+
+    /* Leaflet Popup Styles */
+    .leaflet-popup-content-wrapper,
+    .leaflet-popup-tip {
+      background: #f2eecb;
+    }
+
+    .leaflet-container path{
+      transition: fill .75s;
+    }
+  </style>
+</head>
+<body>
+  <!-- The map -->
+  <div id="map"></div>
+  <!-- Add a link to the Leaflet JavaScript library so you can reference it for building your map -->
+  <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+  <!-- for icon markers -->
+  <script src="js/leaflet.extra-markers.min.js"></script>
+  <!-- Add a link to the jQuery JavaScript library so you can leverage ajax methods to load your data -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <!-- for migration arrows -->
+  <script src="js/leaflet-geometryutil.js"></script>
+  <script src="js/leaflet-arrowheads.js"></script>
+  <!-- All JavaScript goes inside the script tags below -->
+  <script>
+    // define map options
+    const mapOptions = {
+      center: [16.1, -96.416667 /*lat, long*/ ], // center the map on the central coordinates for Oaxaca
+      zoom: 10, // set initial zoom
+      minZoom: 5, // set equal to tile zoom intervals
+      maxZoom: 11, // set equal to tile zoom intervals
+    };
+
+    // define the map with the options above
+    const map = L.map("map", mapOptions);
+
+    // 1883 map tiles
+    const oaxacaMap = L.tileLayer('tiles/{z}/{x}/{y}.png', {
+      tms: true,
+      opacity: 1.0,
+      attribution: "",
+      minZoom: 5,
+      maxZoom: 11
+    });
+
+    const Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+    }).addTo(map);
+
+    // call the map transition
+    transitionMap();
+
+    // define the transition function
+    function transitionMap() {
+
+      setTimeout(function() {
+        map.addLayer(oaxacaMap);
+      }, 1500);
+
+    };
+  </script>
+</body>
+</html>
