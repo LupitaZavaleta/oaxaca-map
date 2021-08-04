@@ -101,6 +101,11 @@ pointsOld2<!DOCTYPE html>
       maxZoom: 11
     }).addTo(map);
 
+    // Satellite map
+    const Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+    });
+
     // Add a scale bar to the map
     L.control.scale({position:'bottomright'}).addTo(map);
 
@@ -289,9 +294,20 @@ pointsOld2<!DOCTYPE html>
         }
       });
 
+      // call the map transition
+      transitionMap();
+
     });
 
+    // define the transition function
+    function transitionMap() {
 
+      // transition to satellite map
+      setTimeout(function() {
+        map.addLayer(Esri_WorldImagery);
+      }, 3000);
+
+    };
 
   </script>
 </body>
