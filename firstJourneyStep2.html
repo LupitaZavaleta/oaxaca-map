@@ -83,7 +83,7 @@
   <script>
     // define map options
     const mapOptions = {
-      center: [16.29172, -96.44991 /*lat, long*/ ], // center the map on the central coordinates for Oaxaca
+      center: [16.46213, -96.48763 /*lat, long*/ ], // center the map on the central coordinates for Oaxaca
       zoom: 11, // set initial zoom
       minZoom: 5, // set equal to tile zoom intervals
       maxZoom: 11, // set equal to tile zoom intervals
@@ -278,9 +278,14 @@
         }
       });
 
+      panMap();
+
     });
 
-
+    function panMap() {
+      map.panTo([16.29172, -96.44991]);
+      setTimeout(panMap,5000);
+    };
 
   </script>
 </body>
