@@ -170,15 +170,19 @@ pointsOld2<!DOCTYPE html>
 
     // Empty layer groups for overlays
     const pointsOld2 = L.layerGroup().addTo(map); // old map points on the second voyage
-    const trip2Old = L.layerGroup().addTo(map); // the first voyage on the old map
+    const trip2Old = L.layerGroup().addTo(map); // the second voyage on the old map
+    const pointsNew2 = L.layerGroup(); // new map points on the second voyage
+    const trip2New = L.layerGroup(); // the second voyage on the new map
 
     // use jquery to load GeoJSON data
     $.when(
       $.getJSON('data/Points-Old-2.geojson'),
-      $.getJSON('data/Movement-Splines-Old-2.geojson')
+      $.getJSON('data/Movement-Splines-Old-2.geojson'),
+      $.getJSON('data/Points-Contemporary-2.geojson'),
+      $.getJSON('data/Movement-Splines-Contemporary-2.geojson')
       // when the files are done loading,
       // identify them with names and process them through a function
-    ).done(function(oldPts2, oldLines2) {
+    ).done(function(oldPts2, oldLines2, newPts2, newLines2) {
 
       // initiate a leaflet GeoJSON layer with L.geoJson, feed it the data, and add to the map
       const oldPoints2 = L.geoJson(oldPts2, {
@@ -294,6 +298,120 @@ pointsOld2<!DOCTYPE html>
         }
       });
 
+      // initiate a leaflet GeoJSON layer with L.geoJson, feed it the data, and add to the map
+      const newPoints2 = L.geoJson(newPts2, {
+        pointToLayer: function(feature, latlng) {
+          let place = feature.properties.Place;
+          return L.marker(latlng, {
+            icon: getIcon(place)
+          });
+        },
+        // for each feature...
+        onEachFeature: function(feature, layer) {
+
+          let popUp = layer.feature.properties.Place; // the column is "Place"
+
+          layer.bindPopup('<h3>' + popUp + '</h3>');
+          layer.once('mouseover', function() {
+            layer.openPopup();
+            layer.setIcon(getHighlight(popUp));
+          });
+          layer.on('mouseout', function(e) { // On mouseout...
+            layer.closePopup(); // close the popup
+            layer.setIcon(getIcon(popUp));
+            layer.once('mouseover', function() {
+              layer.openPopup();
+              layer.setIcon(getHighlight(popUp));
+            });
+          });
+
+          if (popUp == "Miahuatlán de Porfirio Díaz") {
+            pointsNew2.addLayer(layer);
+          } if (popUp == "San José del Pacífico") {
+            pointsNew2.addLayer(layer);
+          } if (popUp == "San Miguel Suchixtepec") {
+            pointsNew2.addLayer(layer);
+          } if (popUp == "San Pedro el Alto") {
+            pointsNew2.addLayer(layer);
+          } if (popUp == "Río Copalita") {
+            pointsNew2.addLayer(layer);
+          } if (popUp == "Cerro de la Pluma") {
+            pointsNew2.addLayer(layer);
+          } if (popUp == "Finca cafetalera La Providencia") {
+            pointsNew2.addLayer(layer);
+          };
+
+        }
+      });
+
+      const arrows3 = L.geoJson(newLines2, {
+        // Style the arrowheads
+        arrowheads: {
+          yawn: 30,
+          size: '10px',
+          frequency: 'endonly',
+          opacity: 0.65
+        },
+        // Style the layer
+        style: function(feature) {
+          return {
+            color: '#4f0809',
+            dashArray: '10, 5',
+            weight: 2.5,
+            opacity: 0.65
+          };
+        },
+        onEachFeature: function(feature, layer) {
+
+          let popUp = ('<h3>Trip Notes:<br>' + 'Left ' + layer.feature.properties.Beginning + ' at ' + layer.feature.properties.T_Departure + ' on ' + layer.feature.properties.D_Date + '.' +
+                       '<br>Arrived at ' + layer.feature.properties.End + ' at ' + layer.feature.properties.T_Arrival + ' on ' + layer.feature.properties.A_Date + '.</h3>'); // the column is "Place"
+
+          layer.bindPopup(popUp);
+
+          layer.once('mouseover', function() {
+            layer.openPopup();
+            layer.setStyle({
+              color: 'orange',
+              dashArray: '10, 5',
+              weight: 2.5,
+              opacity: 0.65
+            });
+          });
+          layer.on('mouseout', function(e) { // On mouseout...
+            layer.closePopup(); // close the popup
+            layer.setStyle({
+              color: '#4f0809',
+              dashArray: '10, 5',
+              weight: 2.5,
+              opacity: 0.65
+            });
+            layer.once('mouseover', function() {
+              layer.openPopup();
+              layer.setStyle({
+                color: 'orange',
+                dashArray: '10, 5',
+                weight: 2.5,
+                opacity: 0.65
+              });
+            });
+          });
+
+          if (layer.feature.properties.id == 1) {
+            trip2New.addLayer(layer);
+          } if (layer.feature.properties.id == 2) {
+            trip2New.addLayer(layer);
+          } if (layer.feature.properties.id == 3) {
+            trip2New.addLayer(layer);
+          } if (layer.feature.properties.id == 4) {
+            trip2New.addLayer(layer);
+          } if (layer.feature.properties.id == 5) {
+            trip2New.addLayer(layer);
+          } if (layer.feature.properties.id == 6) {
+            trip2New.addLayer(layer);
+          };
+        }
+      });
+
       // call the map transition
       transitionMap();
 
@@ -305,7 +423,14 @@ pointsOld2<!DOCTYPE html>
       // transition to satellite map
       setTimeout(function() {
         map.addLayer(Esri_WorldImagery);
+        map.removeLayer(pointsOld2);
+        map.removeLayer(trip2Old);
       }, 3000);
+
+      setTimeout(function() {
+        map.addLayer(pointsNew2);
+        map.addLayer(trip2New);
+      }, 3500);
 
     };
 
